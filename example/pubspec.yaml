@@ -5,8 +5,7 @@ version: 1.0.0+1
 environment:
   sdk: '>=2.2.2 <3.0.0'
 dependencies:
-  day_calendar_flutter:
-    path: ../
+  day_calendar_flutter: ^1.1.1
   intl: ^0.17.0
   flutter_mobx: ^1.0.1
   mobx: ^1.0.2+2

@@ -38,3 +38,8 @@
 ## [1.1.0] - Add release date
 
 * add feature for all day events
+
+## [1.1.1] - 31/03/2021
+
+* Fixed bug on change month or year
+* Fixed bug on months with 31 days
