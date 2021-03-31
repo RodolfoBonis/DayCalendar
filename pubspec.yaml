@@ -21,3 +21,6 @@ dev_dependencies:
     sdk: flutter
 
 flutter:
+
+scripts:
+  watch: flutter pub run build_runner watch --delete-conflicting-outputs --use-polling-watcher

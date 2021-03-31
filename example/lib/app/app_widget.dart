@@ -6,7 +6,6 @@ class AppWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      navigatorKey: Modular.navigatorKey,
       title: 'Flutter Slidy',
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
@@ -18,7 +17,6 @@ class AppWidget extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       initialRoute: '/',
-      onGenerateRoute: Modular.generateRoute,
-    );
+    ).modular();
   }
 }
