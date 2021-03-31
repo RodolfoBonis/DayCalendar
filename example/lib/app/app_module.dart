@@ -1,22 +1,17 @@
 import 'package:example/app/app_controller.dart';
-import 'package:example/app/modules/home/home_module.dart';
+import 'package:example/app/modules/home/home_controller.dart';
+import 'package:example/app/modules/home/home_page.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter/material.dart';
-import 'package:example/app/app_widget.dart';
 
-class AppModule extends MainModule {
+class AppModule extends Module {
   @override
   List<Bind> get binds => [
         Bind((i) => AppController()),
+        Bind((i) => HomeController()),
       ];
 
   @override
-  List<Router> get routers => [
-        Router('/', module: HomeModule()),
+  List<ModularRoute> get routes => [
+        ChildRoute("/", child: (context, args) => HomePage()),
       ];
-
-  @override
-  Widget get bootstrap => AppWidget();
-
-  static Inject get to => Inject<AppModule>.of();
 }

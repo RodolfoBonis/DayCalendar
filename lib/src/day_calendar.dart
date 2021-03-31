@@ -67,6 +67,8 @@ class _DayCalendarFlutterState extends State<DayCalendarFlutter> {
 
   DayCalendarController controller = new DayCalendarController();
 
+  int lengthMonth = 31;
+
   @override
   void initState() {
     super.initState();
@@ -77,6 +79,8 @@ class _DayCalendarFlutterState extends State<DayCalendarFlutter> {
     );
     pageController = PageController(initialPage: widget.currentDate.day);
     widget.events = controller.validateEventsDate(widget.events);
+    lengthMonth =
+        DateTime(widget.currentDate.year, widget.currentDate.month + 1, 0).day;
   }
 
   @override
@@ -85,19 +89,42 @@ class _DayCalendarFlutterState extends State<DayCalendarFlutter> {
       child: PageView.builder(
         itemCount: widget.changePage == null ||
                 (widget.changePage != null && widget.changePage)
-            ? DateUtil()
-                .daysInMonth(widget.currentDate.month, widget.currentDate.year)
+            ? DateTime(widget.currentDate.year, widget.currentDate.month + 1, 0)
+                        .day ==
+                    29
+                ? 366
+                : 365
             : 1,
         controller: pageController,
         onPageChanged: (i) {
+          var oldMonth = widget.currentDate.month;
           setState(() {
-            widget.currentDate = DateTime(
+            if (double.parse(i.toString()) <
+                double.parse(pageController.page.toString())) {
+              widget.currentDate = DateTime(
                 widget.currentDate.year,
                 widget.currentDate.month,
-                i,
-                widget.currentDate.hour,
-                widget.currentDate.minute);
+                widget.currentDate.day - 1,
+              );
+            }
+
+            if (double.parse(i.toString()) >
+                double.parse(pageController.page.toString())) {
+              widget.currentDate = DateTime(
+                widget.currentDate.year,
+                widget.currentDate.month,
+                widget.currentDate.day + 1,
+              );
+            }
           });
+
+          if (oldMonth != widget.currentDate.month) {
+            setState(() {
+              lengthMonth = DateTime(
+                      widget.currentDate.year, widget.currentDate.month + 1, 0)
+                  .day;
+            });
+          }
 
           if (widget.onDateChange != null) {
             widget.onDateChange(widget.currentDate);
@@ -110,7 +137,7 @@ class _DayCalendarFlutterState extends State<DayCalendarFlutter> {
                 Padding(
                   padding: EdgeInsets.only(
                     top: widget.showHeader != null && widget.showHeader
-                        ? 100.0
+                        ? 120.0
                         : 0.0,
                   ),
                   child: SingleChildScrollView(
@@ -146,7 +173,7 @@ class _DayCalendarFlutterState extends State<DayCalendarFlutter> {
     return widget.showHeader != null && widget.showHeader
         ? widget.customHeader == null
             ? Container(
-                height: 80,
+                height: 100,
                 child: Card(
                   elevation: 5,
                   child: Padding(
