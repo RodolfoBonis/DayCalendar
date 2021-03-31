@@ -79,18 +79,22 @@ class _DayCalendarFlutterState extends State<DayCalendarFlutter> {
     );
     pageController = PageController(initialPage: getDayOfYear());
     widget.events = controller.validateEventsDate(widget.events);
-    lengthPages =
-        DateTime(widget.currentDate.year, widget.currentDate.month + 1, 0)
-                    .day ==
-                29
-            ? 366 + (355 * 2)
-            : 365 * 3;
+    lengthPages = DateTime(widget.currentDate.year, 2 + 1, 0).day == 29
+        ? 366 + (355 * 2)
+        : 365 * 3;
   }
 
   int getDayOfYear() {
     final date = widget.currentDate;
     final diff = DateTime.now().difference(new DateTime(date.year, 1, 1, 0, 0));
-    return diff.inDays * 3;
+
+    return calculateLeapYear() + (diff.inDays + 1);
+  }
+
+  int calculateLeapYear({int year}) {
+    return DateTime(year ?? widget.currentDate.year, 2 + 1, 0).day == 29
+        ? 366
+        : 365;
   }
 
   @override
