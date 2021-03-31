@@ -13,6 +13,8 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
   @override
   HomeController get controller => super.controller;
 
+  DateTime date = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,11 +24,14 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
         body: Column(
           children: <Widget>[
             DayCalendarFlutter(
-              currentDate: DateTime(2024, 2, 28),
+              currentDate: date,
               initialHour: 06,
               finalHour: 22,
               onDateChange: (i) {
                 print(i);
+                setState(() {
+                  date = i;
+                });
               },
               events: [
                 new Event(

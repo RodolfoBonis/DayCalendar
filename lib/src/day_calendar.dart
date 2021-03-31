@@ -67,7 +67,7 @@ class _DayCalendarFlutterState extends State<DayCalendarFlutter> {
 
   DayCalendarController controller = new DayCalendarController();
 
-  int lengthMonth = 31;
+  int lengthPages = 31;
 
   @override
   void initState() {
@@ -77,10 +77,20 @@ class _DayCalendarFlutterState extends State<DayCalendarFlutter> {
       finalHour: widget.finalHour,
       currentDate: widget.currentDate,
     );
-    pageController = PageController(initialPage: widget.currentDate.day);
+    pageController = PageController(initialPage: getDayOfYear());
     widget.events = controller.validateEventsDate(widget.events);
-    lengthMonth =
-        DateTime(widget.currentDate.year, widget.currentDate.month + 1, 0).day;
+    lengthPages =
+        DateTime(widget.currentDate.year, widget.currentDate.month + 1, 0)
+                    .day ==
+                29
+            ? 366 + (355 * 2)
+            : 365 * 3;
+  }
+
+  int getDayOfYear() {
+    final date = widget.currentDate;
+    final diff = DateTime.now().difference(new DateTime(date.year, 1, 1, 0, 0));
+    return diff.inDays * 3;
   }
 
   @override
@@ -89,15 +99,10 @@ class _DayCalendarFlutterState extends State<DayCalendarFlutter> {
       child: PageView.builder(
         itemCount: widget.changePage == null ||
                 (widget.changePage != null && widget.changePage)
-            ? DateTime(widget.currentDate.year, widget.currentDate.month + 1, 0)
-                        .day ==
-                    29
-                ? 366
-                : 365
+            ? lengthPages
             : 1,
         controller: pageController,
         onPageChanged: (i) {
-          var oldMonth = widget.currentDate.month;
           setState(() {
             if (double.parse(i.toString()) <
                 double.parse(pageController.page.toString())) {
@@ -117,14 +122,6 @@ class _DayCalendarFlutterState extends State<DayCalendarFlutter> {
               );
             }
           });
-
-          if (oldMonth != widget.currentDate.month) {
-            setState(() {
-              lengthMonth = DateTime(
-                      widget.currentDate.year, widget.currentDate.month + 1, 0)
-                  .day;
-            });
-          }
 
           if (widget.onDateChange != null) {
             widget.onDateChange(widget.currentDate);
